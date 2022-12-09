@@ -1,3 +1,6 @@
+import json
+
+
 class Connector:
     """
     Класс коннектор к файлу, обязательно файл должен быть в json формате
@@ -18,10 +21,9 @@ class Connector:
         pass
 
     def insert(self, data):
-        """
-        Запись данных в файл с сохранением структуры и исходных данных
-        """
-        pass
+        with open('df.json', 'r') as f:
+            json.dump(data, f)
+        return self.__data_file
 
     def select(self, query):
         """
