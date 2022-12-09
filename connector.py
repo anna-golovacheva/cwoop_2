@@ -30,10 +30,17 @@ class Connector:
 
 
 
-    def insert(self, data):
-        with open('df.json', 'r') as f:
-            json.dump(data, f)
-        return self.__data_file
+    def insert(self, data_insert):
+        try:
+            with open('df.json', 'r') as f:
+                data = json.loads(f.read())
+            
+            with open('df.json', 'w') as f:
+                data.append(data_insert)
+                f.write(json.dumps(data))
+
+        except Exception as ex:
+            logging.critical(ex)
 
     def select(self, query):
         """
@@ -45,13 +52,10 @@ class Connector:
         """
         try:
             with open(self.__data_file, 'r') as file:
-                data = json.loads(file)
-                file.close()
+                data = json.loads(file.read())
+                print(data)
+                return sorted(data, key=query)
             
-            with open(self.__data_file, 'w') as file:
-                data = sorted(data, key=query)
-                file.write(json.dumps(data))
-
         except Exception as ex:
             logging.critical(f'{ex}')
 
@@ -71,9 +75,9 @@ if __name__ == '__main__':
     data_for_file = {'id': 1, 'title': 'tet'}
 
     df.insert(data_for_file)
-    data_from_file = df.select(dict())
+    data_from_file = df.select(lambda el: el['id'])
     assert data_from_file == [data_for_file]
-
+    
     df.delete(dict())
     data_from_file = df.select(dict())
     assert data_from_file == []
