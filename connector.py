@@ -21,7 +21,7 @@ class Connector:
         pass
 
     def insert(self, data):
-        with open('df.json', 'r+') as f:
+        with open(self.__data_file, 'r+') as f:
             files = json.load(f)
             files.append(data)
             json.dump(files, f)
