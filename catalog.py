@@ -5,8 +5,12 @@ class Product:
     count: int
     category: int
 
-    def __init__(self, *args, **kwargs):
-        pass
+    def __init__(self, args: dict):
+        self.id = args.get('id')
+        self.title = args.get('title')
+        self.price = args.get('price')
+        self.count = args.get('count')
+        self.category = args.get('category')
 
     def __bool__(self):
         """
