@@ -31,10 +31,9 @@ class Connector:
 
 
     def insert(self, data):
-        """
-        Запись данных в файл с сохранением структуры и исходных данных
-        """
-        pass
+        with open('df.json', 'r') as f:
+            json.dump(data, f)
+        return self.__data_file
 
     def select(self, query):
         """
