@@ -16,15 +16,11 @@ class Product:
         """
         Проверяет есть ли товар в наличии
         """
-        if self.count > 0:
-            print(f'товар есть в наличии ({self.count} шт.)')
-            return True
-        else:
-            print('товара нет в наличии')
-            return False
+        return True if self.count > 0 else False
+
     def __len__(self):
         """
         Возвращает количество товара на складе
         """
-        pass
+        return self.count
 
