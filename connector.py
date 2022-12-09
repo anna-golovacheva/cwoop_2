@@ -53,8 +53,12 @@ class Connector:
         try:
             with open(self.__data_file, 'r') as file:
                 data = json.loads(file.read())
-                print(data)
-                return sorted(data, key=query)
+                result = None
+
+                for key in query.keys():
+                    result = [*filter(lambda el: el[key] == query[key], result if result else data)]
+                
+                return result
             
         except Exception as ex:
             logging.critical(f'{ex}')
@@ -75,7 +79,7 @@ if __name__ == '__main__':
     data_for_file = {'id': 1, 'title': 'tet'}
 
     df.insert(data_for_file)
-    data_from_file = df.select(lambda el: el['id'])
+    data_from_file = df.select({'id': 1})
     assert data_from_file == [data_for_file]
     
     df.delete(dict())
