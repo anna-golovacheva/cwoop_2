@@ -1,3 +1,4 @@
+import json
 class Connector:
     """
     Класс коннектор к файлу, обязательно файл должен быть в json формате
@@ -31,7 +32,16 @@ class Connector:
         {'price': 1000}, должно отфильтровать данные по полю price
         и вернуть все строки, в которых цена 1000
         """
-        pass
+        data_from_file = []
+        with open(self.__data_file, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        for d in data:
+            for k, v in query.items():
+                if d[k] == v:
+                    data_from_file.append(d)
+        return data_from_file
+
+
 
     def delete(self, query):
         """
@@ -47,7 +57,7 @@ if __name__ == '__main__':
     data_for_file = {'id': 1, 'title': 'tet'}
 
     df.insert(data_for_file)
-    data_from_file = df.select(dict())
+    data_from_file = df.select({'id': 1})
     assert data_from_file == [data_for_file]
 
     df.delete(dict())
