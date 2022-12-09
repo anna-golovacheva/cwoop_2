@@ -35,6 +35,9 @@ class Connector:
         data_from_file = []
         with open(self.__data_file, 'r', encoding='utf-8') as file:
             data = json.load(file)
+        if not query:
+            return data
+
         for d in data:
             for k, v in query.items():
                 if d[k] == v:
