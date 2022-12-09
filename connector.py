@@ -50,18 +50,20 @@ class Connector:
         {'price': 1000}, должно отфильтровать данные по полю price
         и вернуть все строки, в которых цена 1000
         """
-        try:
-            with open(self.__data_file, 'r') as file:
-                data = json.loads(file.read())
-                result = None
 
-                for key in query.keys():
-                    result = [*filter(lambda el: el[key] == query[key], result if result else data)]
-                
-                return result
-            
-        except Exception as ex:
-            logging.critical(f'{ex}')
+        data_from_file = []
+        with open(self.__data_file, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        
+        if not query:
+            return data
+        
+        for d in data:
+            for k, v in query.items():
+                if d[k] == v:
+                    data_from_file.append(d)
+        return data_from_file
+
 
     def delete(self, query):
         """
@@ -95,6 +97,7 @@ if __name__ == '__main__':
     data_from_file = df.select({'id': 1})
 
     logging.info('Try to  assert data_from_file == [data_for_file]')
+
     assert data_from_file == [data_for_file]
     
     df.delete({'id': 1})
