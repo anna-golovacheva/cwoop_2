@@ -1,3 +1,8 @@
+import logging
+import os
+import json
+
+
 class Connector:
     """
     Класс коннектор к файлу, обязательно файл должен быть в json формате
@@ -10,12 +15,20 @@ class Connector:
         self.__data_file = df
         self.__connect()
 
+
     def __connect(self):
         """
         Проверка на существование файла с данными и
         создание его при необходимости
         """
-        pass
+        try:
+            if self.__data_file not in os.listdir('.'):
+                with open(self.__data_file, 'w') as file:
+                    file.write(json.dumps([]))
+        except Exception as ex:
+            logging.critical(ex)
+
+
 
     def insert(self, data):
         """
@@ -31,7 +44,17 @@ class Connector:
         {'price': 1000}, должно отфильтровать данные по полю price
         и вернуть все строки, в которых цена 1000
         """
-        pass
+        try:
+            with open(self.__data_file, 'r') as file:
+                data = json.loads(file)
+                file.close()
+            
+            with open(self.__data_file, 'w') as file:
+                data = sorted(data, key=query)
+                file.write(json.dumps(data))
+
+        except Exception as ex:
+            logging.critical(f'{ex}')
 
     def delete(self, query):
         """
@@ -42,6 +65,8 @@ class Connector:
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+
     df = Connector('df.json')
 
     data_for_file = {'id': 1, 'title': 'tet'}
