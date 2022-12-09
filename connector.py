@@ -68,7 +68,20 @@ class Connector:
         Удаление записей из файла, которые соответствуют запрос,
         как в методе select
         """
-        pass
+        try:
+            with open('df.json', 'r') as f:
+                data = json.loads(f.read())
+            
+            with open('df.json', 'w') as f:
+                result = None
+
+                for key in query.keys():
+                    result = [*filter(lambda el: el[key] != query[key], result if result else data)]
+
+                f.write(json.dumps(result))
+
+        except Exception as ex:
+            logging.critical(ex)
 
 
 if __name__ == '__main__':
@@ -80,8 +93,12 @@ if __name__ == '__main__':
 
     df.insert(data_for_file)
     data_from_file = df.select({'id': 1})
+
+    logging.info('Try to  assert data_from_file == [data_for_file]')
     assert data_from_file == [data_for_file]
     
-    df.delete(dict())
-    data_from_file = df.select(dict())
+    df.delete({'id': 1})
+    data_from_file = df.select({'id': 1})
+
+    logging.info('Try to  assert data_from_file == []')
     assert data_from_file == []
