@@ -94,10 +94,7 @@ if __name__ == '__main__':
     data_for_file = {'id': 1, 'title': 'tet'}
 
     df.insert(data_for_file)
-    data_from_file = df.select({'id': 1})
-
-    logging.info('Try to  assert data_from_file == [data_for_file]')
-
+    
     assert data_from_file == [data_for_file]
     
     df.delete({'id': 1})
