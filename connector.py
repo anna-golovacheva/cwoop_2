@@ -21,8 +21,10 @@ class Connector:
         pass
 
     def insert(self, data):
-        with open('df.json', 'r') as f:
-            json.dump(data, f)
+        with open('df.json', 'r+') as f:
+            files = json.load(f)
+            files.append(data)
+            json.dump(files, f)
         return self.__data_file
 
     def select(self, query):
